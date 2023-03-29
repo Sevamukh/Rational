@@ -1,7 +1,7 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class Tests {
+public class RationalTest {
     @Test
     public void testStandardConstructor() {
         Rational standard = new Rational();
