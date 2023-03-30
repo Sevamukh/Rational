@@ -1,11 +1,171 @@
 import org.junit.*;
+
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class RationalTest {
+
+    private Rational fraction, fraction2;
+
     @Test
-    public void testStandardConstructor() {
-        Rational standard = new Rational();
-        assertEquals("Standard constructor returns wrong numerator", 0, standard.getNumerator());
-        assertEquals("Standard constructor returns wrong denominator", 1, standard.getDenominator());
+    public void defaultConstructor() {
+        fraction = new Rational();
+        assertEquals("Конструктор по-умолчанию возвращает неверные значения",
+                List.of(0, 1),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void constructorWithZeroDenominator() {
+        fraction = new Rational(1, 0);
+    }
+
+    @Test
+    public void normalConstructor() {
+        fraction = new Rational(1, 2);
+        assertEquals("Конструктор возвращает неверные значения",
+                List.of(1, 2),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void constructorOfReducibleFraction() {
+        fraction = new Rational(2, 4);
+        assertEquals("Конструктор неверно сокращает дробь",
+                List.of(1, 2),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void setterForNumerator() {
+        fraction = new Rational(1, 4);
+        fraction.setNumerator(2);
+        assertEquals("Сеттер числителя работает некорректно",
+                List.of(1, 2),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void setterForNonZeroDenominator() {
+        fraction = new Rational(1, 2);
+        fraction.setDenominator(3);
+        assertEquals("Сеттер знаменателя работает некорректно",
+                List.of(1, 3),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void setterForZeroDenominator() {
+        fraction = new Rational(1, 2);
+        fraction.setDenominator(0);
+    }
+
+    @Test
+    public void equalForTwoEqualFractions() {
+        fraction = new Rational(1, 2);
+        fraction2 = new Rational(1, 2);
+        assertEquals("Ошибка сравнения одинаковых дробей", fraction, fraction2);
+    }
+
+    @Test
+    public void equalForTwoDifferentFractions() {
+        fraction = new Rational(1, 2);
+        fraction2 = new Rational(1, 3);
+        assertNotEquals("Ошибка сравнения разных дробей", fraction, fraction2);
+    }
+
+    @Test
+    public void lessForTwoFractionsWithSameDenominator() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(2, 3);
+        assertTrue("Ошибка сравнения дробей c одинаковыми знаменателями",
+                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        );
+    }
+
+    @Test
+    public void lessForTwoFractionsWithSameNumerator() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(1, 2);
+        assertTrue("Ошибка сравнения дробей c одинаковыми числителями",
+                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        );
+    }
+
+    @Test
+    public void lessForTwoFractionsWithDifferentNumeratorAndDenominator() {
+        fraction = new Rational(2, 5);
+        fraction2 = new Rational(1, 2);
+        assertTrue("Ошибка сравнения дробей",
+                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        );
+    }
+
+    @Test
+    public void lessOrEqual() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(1, 2);
+        assertTrue("Ошибка сравнения дробей на меньше или равно",
+                fraction.lessOrEqual(fraction2) &&
+                        !fraction2.lessOrEqual(fraction) &&
+                        fraction.lessOrEqual(fraction)
+        );
+    }
+
+    @Test
+    public void plus() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(1, 2);
+        fraction = fraction.plus(fraction2);
+        assertEquals("Сложение дробей выполняется некорректно",
+                List.of(5, 6),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void multiply() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(1, 2);
+        fraction = fraction.multiply(fraction2);
+        assertEquals("Умножение дробей выполняется некорректно",
+                List.of(1, 6),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void minus() {
+        fraction = new Rational(1, 2);
+        fraction2 = new Rational(1, 3);
+        fraction = fraction.minus(fraction2);
+        assertEquals("Вычитание дробей выполняется некорректно",
+                List.of(1, 6),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void divideWithNonZeroDivisor() {
+        fraction = new Rational(1, 3);
+        fraction2 = new Rational(1, 2);
+        fraction = fraction.divide(fraction2);
+        assertEquals("Деление дробей выполняется некорректно",
+                List.of(2, 3),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void divideWithZeroDivisor() {
+        fraction = new Rational(1, 2);
+        fraction2 = new Rational();
+        fraction = fraction.divide(fraction2);
     }
 }
