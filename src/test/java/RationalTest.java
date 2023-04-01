@@ -20,6 +20,7 @@ public class RationalTest {
     @Test(expected = ArithmeticException.class)
     public void constructorWithZeroDenominator() {
         fraction = new Rational(1, 0);
+        fail("Ожидалась арифметическая ошибка деления на ноль");
     }
 
     @Test
@@ -34,8 +35,26 @@ public class RationalTest {
     @Test
     public void constructorOfReducibleFraction() {
         fraction = new Rational(2, 4);
-        assertEquals("Конструктор неверно сокращает дробь",
+        assertEquals("Конструктор возвращает неверные значения для сократимой дроби",
                 List.of(1, 2),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void constructorOfReducibleFractionWithZeroNumerator() {
+        fraction = new Rational(0, 2);
+        assertEquals("Конструктор возвращает неверные значения для дроби c нулевым числителем",
+                List.of(0, 1),
+                List.of(fraction.getNumerator(), fraction.getDenominator())
+        );
+    }
+
+    @Test
+    public void constructorWithNegativeDenominator() {
+        fraction = new Rational(1, -2);
+        assertEquals("Конструктор возвращает неверные значения для дроби с минусом в знаменателе",
+                List.of(-1, 2),
                 List.of(fraction.getNumerator(), fraction.getDenominator())
         );
     }
@@ -64,27 +83,28 @@ public class RationalTest {
     public void setterForZeroDenominator() {
         fraction = new Rational(1, 2);
         fraction.setDenominator(0);
+        fail("Ожидалась арифметическая ошибка деления на ноль");
     }
 
     @Test
     public void equalForTwoEqualFractions() {
         fraction = new Rational(1, 2);
         fraction2 = new Rational(1, 2);
-        assertEquals("Ошибка сравнения одинаковых дробей", fraction, fraction2);
+        assertEquals("Ошибка проверки на равенство одинаковых дробей", fraction, fraction2);
     }
 
     @Test
     public void equalForTwoDifferentFractions() {
         fraction = new Rational(1, 2);
         fraction2 = new Rational(1, 3);
-        assertNotEquals("Ошибка сравнения разных дробей", fraction, fraction2);
+        assertNotEquals("Ошибка проверки на равенство разных дробей", fraction, fraction2);
     }
 
     @Test
     public void lessForTwoFractionsWithSameDenominator() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(2, 3);
-        assertTrue("Ошибка сравнения дробей c одинаковыми знаменателями",
+        assertTrue("Ошибка сравнения на 'меньше' дробей c одинаковыми знаменателями",
                 fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
         );
     }
@@ -93,7 +113,7 @@ public class RationalTest {
     public void lessForTwoFractionsWithSameNumerator() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения дробей c одинаковыми числителями",
+        assertTrue("Ошибка сравнения на 'меньше' дробей c одинаковыми числителями",
                 fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
         );
     }
@@ -102,7 +122,7 @@ public class RationalTest {
     public void lessForTwoFractionsWithDifferentNumeratorAndDenominator() {
         fraction = new Rational(2, 5);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения дробей",
+        assertTrue("Ошибка сравнения на 'меньше' дробей",
                 fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
         );
     }
@@ -111,7 +131,7 @@ public class RationalTest {
     public void lessOrEqual() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения дробей на меньше или равно",
+        assertTrue("Ошибка сравнения дробей на 'меньше или равно'",
                 fraction.lessOrEqual(fraction2) &&
                         !fraction2.lessOrEqual(fraction) &&
                         fraction.lessOrEqual(fraction)
@@ -167,5 +187,6 @@ public class RationalTest {
         fraction = new Rational(1, 2);
         fraction2 = new Rational();
         fraction = fraction.divide(fraction2);
+        fail("Ожидалась арифметическая ошибка деления на ноль");
     }
 }
