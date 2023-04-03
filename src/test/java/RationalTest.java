@@ -71,10 +71,10 @@ public class RationalTest {
 
     @Test
     public void setterForNonZeroDenominator() {
-        fraction = new Rational(1, 2);
-        fraction.setDenominator(3);
+        fraction = new Rational(2, 3);
+        fraction.setDenominator(4);
         assertEquals("Сеттер знаменателя работает некорректно",
-                List.of(1, 3),
+                List.of(1, 2),
                 List.of(fraction.getNumerator(), fraction.getDenominator())
         );
     }
@@ -104,8 +104,9 @@ public class RationalTest {
     public void lessForTwoFractionsWithSameDenominator() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(2, 3);
-        assertTrue("Ошибка сравнения на 'меньше' дробей c одинаковыми знаменателями",
-                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        assertEquals("Ошибка сравнения на 'меньше' дробей c одинаковыми знаменателями",
+                List.of(true, false, false),
+                List.of(fraction.less(fraction2), fraction2.less(fraction), fraction.less(fraction))
         );
     }
 
@@ -113,8 +114,9 @@ public class RationalTest {
     public void lessForTwoFractionsWithSameNumerator() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения на 'меньше' дробей c одинаковыми числителями",
-                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        assertEquals("Ошибка сравнения на 'меньше' дробей c одинаковыми числителями",
+                List.of(true, false, false),
+                List.of(fraction.less(fraction2), fraction2.less(fraction), fraction.less(fraction))
         );
     }
 
@@ -122,8 +124,9 @@ public class RationalTest {
     public void lessForTwoFractionsWithDifferentNumeratorAndDenominator() {
         fraction = new Rational(2, 5);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения на 'меньше' дробей",
-                fraction.less(fraction2) && !fraction2.less(fraction) && !fraction.less(fraction)
+        assertEquals("Ошибка сравнения на 'меньше' дробей",
+                List.of(true, false, false),
+                List.of(fraction.less(fraction2), fraction2.less(fraction), fraction.less(fraction))
         );
     }
 
@@ -131,10 +134,9 @@ public class RationalTest {
     public void lessOrEqual() {
         fraction = new Rational(1, 3);
         fraction2 = new Rational(1, 2);
-        assertTrue("Ошибка сравнения дробей на 'меньше или равно'",
-                fraction.lessOrEqual(fraction2) &&
-                        !fraction2.lessOrEqual(fraction) &&
-                        fraction.lessOrEqual(fraction)
+        assertEquals("Ошибка сравнения дробей на 'меньше или равно'",
+                List.of(true, false, true),
+                List.of(fraction.lessOrEqual(fraction2), fraction2.lessOrEqual(fraction), fraction.lessOrEqual(fraction))
         );
     }
 
